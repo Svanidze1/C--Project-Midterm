@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Midterm Project Requirements &#8212; C# Windows Forms</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>/* Layout: a lab manual — sticky step rail on the left, one reading column of numbered steps,
+   with annotated Windows "screens" set into the text like figures in a printed manual. */
+:root{
+  --paper:#f5f4fa; --card:#ffffff; --ink:#1c1a2b; --muted:#5d5a72; --line:#dddae9;
+  --accent:#512bd4; --accent-ink:#ffffff; --accent-soft:#ece7fd;
+  --ok:#1e7a4f; --ok-soft:#e3f4ea; --warn:#8f5600; --warn-soft:#fbf0dd; --bad:#b3261e; --bad-soft:#fbe6e4;
+  --code-bg:#1d1a2c; --code-ink:#ece9ff; --code-bar:#2a2640; --code-dim:#a39fc4;
+  --pin:#d6336c; --pin-ink:#ffffff;
+  /* Windows screens stay light in both themes: they are pictures of a light UI */
+  --win-bg:#f3f3f3; --win-bar:#ffffff; --win-edge:#c9c9cf; --win-ink:#1b1b1b; --win-field:#ffffff;
+  --win-field-edge:#8a8a8a; --win-hl:#cce4f7; --win-hl-edge:#7fb4e0; --win-btn:#fdfdfd; --win-pri:#0f6cbd;
+  --win-pri-ink:#ffffff; --win-dim:#9a9a9a; --win-grid-h:#e9e9ee; --win-term:#0c0c0c; --win-term-ink:#d9d9d9;
+  --win-ok:#16c60c; --win-kw:#0000ff;
+  --shadow:rgba(30,20,70,.14);
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", Consolas, "Courier New", monospace;
+  --f-win:"Segoe UI", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#14121c; --card:#1c1a27; --ink:#ecebf4; --muted:#a7a3bd; --line:#2f2b40;
+  --accent:#a895ff; --accent-ink:#14121c; --accent-soft:#272046;
+  --ok:#6fd6a2; --ok-soft:#173226; --warn:#f2b85c; --warn-soft:#352812; --bad:#ff8f86; --bad-soft:#3a1a19;
+  --code-bg:#0d0b14; --code-ink:#ece9ff; --code-bar:#1e1a2c; --code-dim:#8e89b3;
+  --shadow:rgba(0,0,0,.5); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#14121c; --card:#1c1a27; --ink:#ecebf4; --muted:#a7a3bd; --line:#2f2b40;
+  --accent:#a895ff; --accent-ink:#14121c; --accent-soft:#272046;
+  --ok:#6fd6a2; --ok-soft:#173226; --warn:#f2b85c; --warn-soft:#352812; --bad:#ff8f86; --bad-soft:#3a1a19;
+  --code-bg:#0d0b14; --code-ink:#ece9ff; --code-bar:#1e1a2c; --code-dim:#8e89b3;
+  --shadow:rgba(0,0,0,.5); color-scheme:dark }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.page{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:250px minmax(0,1fr);gap:48px;padding-block:28px 64px}
+.main{min-width:0}
+h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,4.4vw,3.1rem);letter-spacing:-.02em}
+h2{font-size:1.75rem;letter-spacing:-.01em}
+h3{font-size:1.3rem}
+h4{font-size:1.02rem;margin:22px 0 8px}
+p{margin:0 0 12px;max-width:68ch}
+code{font-family:var(--f-mono);font-size:.86em;background:var(--accent-soft);color:var(--ink);padding:1px 6px;border-radius:5px;overflow-wrap:anywhere}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+kbd{font-family:var(--f-mono);font-size:.8em;border:1px solid var(--line);border-bottom-width:3px;border-radius:6px;padding:1px 7px;background:var(--card);color:var(--ink);white-space:nowrap}
+.menu{display:inline-block;font-family:var(--f-win);font-size:.86em;font-weight:600;background:var(--card);color:var(--ink);
+  border:1px solid var(--line);border-radius:5px;padding:0 7px;white-space:nowrap}
+
+/* rail */
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);align-self:start;max-height:calc(100vh - 40px);overflow:auto;
+  font-size:.86rem;padding-right:6px}
+.rail-h{font-family:var(--f-display);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.74rem;color:var(--muted);margin:0 0 8px}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+.rail li a{display:grid;grid-template-columns:26px 1fr;gap:6px;align-items:baseline;color:var(--ink);text-decoration:none;padding:5px 8px;border-radius:7px;line-height:1.3}
+.rail li a span{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.rail li a:hover{background:var(--accent-soft)}
+.rail li a.on{background:var(--accent);color:var(--accent-ink)}
+.rail li a.on span{color:var(--accent-ink)}
+.rail-part{font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;margin:12px 0 2px 8px}
+
+/* cover */
+.cover{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,470px);gap:36px;align-items:center;padding-bottom:30px;border-bottom:1px solid var(--line);margin-bottom:34px}
+.cover-text{min-width:0}
+.eyebrow{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px}
+.lede{font-size:1.14rem;color:var(--muted);margin-top:14px}
+.byline{font-weight:700;color:var(--ink);margin-top:4px}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px;margin:18px 0 0;padding:0}
+.facts div{border-top:2px solid var(--accent);padding-top:6px}
+.facts dt{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.facts dd{margin:0;font-weight:700}
+
+.intro{margin-bottom:28px}
+.intro h2{margin-bottom:14px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.two > *{min-width:0}
+ul.tick,ul.cross,ul.checks{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+ul.tick li,ul.cross li,ul.checks li{padding-left:26px;position:relative}
+ul.tick li::before{content:"\2713";position:absolute;left:0;color:var(--ok);font-weight:700}
+ul.cross li::before{content:"\2715";position:absolute;left:0;color:var(--muted)}
+ul.checks li::before{content:"\25A1";position:absolute;left:0;color:var(--accent);font-size:1.1em}
+ol.plain{padding-left:20px;margin:0;display:grid;gap:8px}
+
+/* parts */
+.part{margin:56px 0 22px;padding:22px 24px;border-radius:14px;background:var(--accent);color:var(--accent-ink)}
+.part h2{color:var(--accent-ink)}
+.part p{margin:8px 0 0;opacity:.92;max-width:62ch}
+.part-tag{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+
+/* steps */
+.step{padding:26px 0 30px;border-bottom:1px solid var(--line);scroll-margin-top:calc(env(safe-area-inset-top,0px) + 16px)}
+.step-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.step-head h3{flex:1;min-width:0}
+.num{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper);
+  font-family:var(--f-display);font-weight:700;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.num.alt{background:var(--warn);color:var(--paper)}
+.mins{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.mins:empty{display:none}
+ol.clicks{counter-reset:c;list-style:none;padding:0;margin:0 0 18px;display:grid;gap:8px}
+ol.clicks li{counter-increment:c;position:relative;padding-left:40px;min-height:28px}
+ol.clicks li::before{content:counter(c);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);
+  font-family:var(--f-mono);font-weight:600;font-size:.82rem}
+.done{display:block;background:var(--ok-soft);color:var(--ink);border-radius:10px;padding:10px 14px;margin:18px 0 0;max-width:none}
+.done span{display:inline-block;margin-right:12px;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--ok);white-space:nowrap}
+
+/* notes */
+.note{border-radius:10px;padding:12px 16px;margin:16px 0;border-left:4px solid var(--accent);background:var(--accent-soft)}
+.note > b{display:block;margin-bottom:4px;font-family:var(--f-display)}
+.note p{margin:0;max-width:none}
+.note.tip{border-color:var(--ok);background:var(--ok-soft)}
+.note.warn{border-color:var(--warn);background:var(--warn-soft)}
+.note.bad{border-color:var(--bad);background:var(--bad-soft)}
+.note .code{margin:10px 0 0}
+
+/* tables */
+.tbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.tbl table{border-collapse:collapse;width:100%;font-size:.92rem}
+.tbl th{text-align:left;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--paper);padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl code{white-space:nowrap;overflow-wrap:normal}
+
+/* code */
+.code{margin:14px 0;border-radius:10px;overflow:hidden;background:var(--code-bg);color:var(--code-ink)}
+.code-bar{display:flex;justify-content:space-between;align-items:center;padding:6px 8px 6px 14px;background:var(--code-bar);font-family:var(--f-mono);font-size:.74rem;color:var(--code-dim)}
+.copy{font:600 .74rem var(--f-body);background:transparent;color:var(--code-ink);border:1px solid var(--code-dim);border-radius:6px;padding:3px 10px;cursor:pointer}
+.copy:hover{background:var(--code-bg)}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font-family:var(--f-mono);font-size:.84rem;line-height:1.55}
+.code pre code{background:none;padding:0;color:inherit;font-size:inherit;overflow-wrap:normal}
+
+/* figures */
+.fig{margin:20px 0 22px}
+.shot{overflow-x:auto;padding:4px 2px 10px}
+.fig figcaption{font-size:.88rem;color:var(--muted);margin-top:4px;max-width:70ch}
+.fig figcaption b{color:var(--ink)}
+.pin{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--pin);color:var(--pin-ink);
+  font:700 11px/1 var(--f-body);vertical-align:middle;box-shadow:0 0 0 2px #fff;flex:none}
+
+/* the Windows look */
+.win{background:var(--win-bg);color:var(--win-ink);border:1px solid var(--win-edge);border-radius:8px;overflow:hidden;
+  box-shadow:0 12px 32px var(--shadow);font-family:var(--f-win);font-size:13px;line-height:1.4;min-width:300px}
+.win .tbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 12px;background:var(--win-bar);border-bottom:1px solid var(--win-edge);font-weight:600;font-size:12.5px}
+.win .wc{color:#666;font-weight:400;white-space:nowrap}
+.wbody{padding:12px 14px}
+.wbody.rel{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+.frow{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.flab{min-width:70px}
+.ftb{background:var(--win-field);border:1px solid var(--win-field-edge);border-radius:3px;padding:3px 7px;min-height:24px;font-size:12.5px;color:var(--win-ink);display:inline-flex;align-items:center;gap:6px}
+.ftb.small,.small{font-size:11.5px}
+.ftb.dis{background:#ececec;color:var(--win-dim)}
+.fbtn{background:var(--win-btn);border:1px solid #adadad;border-radius:4px;padding:4px 14px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--win-ink)}
+.fbtn.pri{background:var(--win-pri);border-color:var(--win-pri);color:var(--win-pri-ink)}
+.fgrid{background:#fff;border:1px solid var(--win-field-edge);margin:4px 0 8px;font-size:12.5px;position:relative}
+.fgrid.tall{min-height:120px}
+.fgrid > .pin{position:absolute;right:8px;top:8px}
+.gh,.gr{display:grid;grid-template-columns:44px 1fr 1fr;border-bottom:1px solid #eee}
+.gh{background:var(--win-grid-h);font-weight:600}
+.gh span,.gr span{padding:4px 8px;border-right:1px solid #e3e3e3}
+.fsep{font-size:11.5px;color:#555;border-bottom:1px solid #d5d5d5;margin:10px 0 8px;padding-bottom:2px}
+.fstatus{font-size:12px;color:#14532d;background:#eef7f0;border:1px solid #cfe5d5;padding:4px 8px;border-radius:3px;display:flex;gap:6px;align-items:center}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--win-edge);margin:-2px 0 10px;flex-wrap:wrap}
+.tabs span{padding:6px 12px;border-bottom:2px solid transparent;color:#444;display:inline-flex;gap:6px;align-items:center}
+.tabs span.on{border-color:var(--win-pri);color:var(--win-ink);font-weight:600}
+.tabs.small span{padding:4px 10px}
+.inst{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px}
+.isec{font-size:11.5px;font-weight:600;color:#555;margin:6px 0 6px}
+.tile{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #d9d9d9;border-radius:6px;padding:9px 10px;margin-bottom:8px}
+.tile small{display:block;color:#666;font-size:11.5px}
+.tile.sel{border-color:var(--win-pri);box-shadow:0 0 0 1px var(--win-pri) inset}
+.cb{flex:none;width:16px;height:16px;border:1px solid #777;border-radius:3px;display:inline-grid;place-items:center;font-size:11px;color:#fff;background:#fff}
+.cb.on{background:var(--win-pri);border-color:var(--win-pri)}
+.inst-right{background:#fff;border:1px solid #d9d9d9;border-radius:6px;padding:9px 10px;font-size:12px}
+.idl{margin-top:6px}.idl.sub{padding-left:14px;color:#333}.idl.hl{background:var(--win-hl);border-radius:3px;padding:2px 4px 2px 14px;display:flex;gap:6px;align-items:center}
+.inst-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:#555;flex-wrap:wrap}
+.cmd{background:var(--win-term)}
+.cmd .tbar{background:#1f1f1f;color:#eee;border-color:#333}
+.term{margin:0;padding:12px 14px;color:var(--win-term-ink);font-family:Consolas,var(--f-mono);font-size:12.5px;line-height:1.5;overflow-x:auto}
+.term b{color:#fff}.okt{color:var(--win-ok)}
+.mbar{display:flex;gap:2px;font-size:12.5px;margin:-4px 0 0;flex-wrap:wrap}
+.mbar span{padding:3px 9px;border-radius:3px}.mbar span.on{background:var(--win-hl)}
+.drop{background:#fff;border:1px solid #bdbdbd;box-shadow:0 6px 16px rgba(0,0,0,.18);width:290px;max-width:100%;margin:2px 0 0 52px;padding:4px 0;font-size:12.5px}
+.drop div{padding:4px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.drop small{color:#777}
+.drop .hl,.ctx .hl{background:var(--win-hl);outline:1px solid var(--win-hl-edge)}
+.dsep{height:1px;background:#e2e2e2;padding:0!important;margin:3px 0}
+.kv{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:center;margin-bottom:7px}
+.btns{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.tree div{padding:2px 4px;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tree .t1{padding-left:20px}.tree .t2{padding-left:38px}
+.tree .hl{background:var(--win-hl);outline:1px solid var(--win-hl-edge)}
+.tree.tb{margin-top:8px}
+.ctx{background:#fff;border:1px solid #bdbdbd;box-shadow:0 6px 16px rgba(0,0,0,.18);padding:4px 0;font-size:12.5px;margin-top:62px;min-width:170px}
+.ctx div{padding:4px 14px;display:flex;gap:6px;align-items:center}
+.qbar{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.exec{color:#107c10;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+.qtext{background:#fff;border:1px solid #d5d5d5;margin:0;padding:10px 12px;font-family:Consolas,var(--f-mono);font-size:12.5px;line-height:1.5;overflow-x:auto;color:#1b1b1b}
+.kw{color:var(--win-kw)}
+.qmsg{margin-top:8px;background:#fff;border:1px solid #d5d5d5;padding:6px 10px;font-size:12px}
+.np{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);gap:16px}
+.np-left small{display:block;color:#666;font-size:11.5px;margin-top:6px}
+.np-right{display:grid;gap:8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips span{border:1px solid #c9c9c9;border-radius:3px;padding:1px 8px;font-size:11.5px;background:#fff}
+.tmpl{background:#fff;border:1px solid #d9d9d9;border-radius:6px;padding:9px 11px;display:grid;gap:2px}
+.tmpl small{color:#555;font-size:11.5px}.tmpl .tags{font-size:11px;color:#777}
+.tmpl.hl{border-color:var(--win-pri);box-shadow:0 0 0 1px var(--win-pri) inset;background:#f2f8fd}
+.tmpl b{display:flex;gap:8px;align-items:center}
+.dim{opacity:.55}
+.ng{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px}
+.pk{display:flex;gap:10px;align-items:flex-start;padding:8px;border-bottom:1px solid #e3e3e3;background:#fff}
+.pk small{display:block;color:#666;font-size:11.5px}
+.pk.hl{background:var(--win-hl)}
+.pkicon{flex:none;width:30px;height:30px;border-radius:5px;background:#512bd4;color:#fff;display:grid;place-items:center;font-weight:700;font-size:11px}
+.ng-detail{background:#fff;border:1px solid #d9d9d9;border-radius:6px;padding:10px;display:grid;gap:8px;align-content:start}
+.dz{background:#fff;border:1px dashed #b9b9b9;padding:12px}
+.pair{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.pair .win{flex:1 1 230px}
+.pg{margin-top:8px;background:#fff;border:1px solid #d5d5d5;font-size:12px}
+.pg-sec{background:#f0f0f0;font-weight:600;padding:3px 8px;border-bottom:1px solid #e3e3e3}
+.pr{display:grid;grid-template-columns:90px 1fr;border-bottom:1px solid #eee}
+.pr span{padding:3px 8px}.pr span:first-child{border-right:1px solid #eee;color:#444}
+.pr.hl{background:var(--win-hl);font-weight:600}
+
+/* assignment */
+.tasks{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:10px}
+.task{min-width:0}
+.task{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+.task header{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+.task h3{flex:1;min-width:0}
+.pts{font-family:var(--f-mono);font-size:.78rem;font-weight:600;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:2px 10px;font-variant-numeric:tabular-nums}
+.task.bonus .pts{background:var(--warn);color:var(--paper)}
+.hint{font-size:.94rem;color:var(--muted)}
+.hint b{color:var(--ink)}
+.grading{margin-top:40px}
+.grading h2{margin-bottom:12px}
+.grading h3{margin:22px 0 8px}
+.foot{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+
+/* narrow */
+@media (max-width:960px){
+  .page{grid-template-columns:minmax(0,1fr);gap:20px}
+  .rail{position:static;max-height:none;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card)}
+  .rail ol{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+  .rail-part{grid-column:1/-1}
+  .cover{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .inst,.np,.ng{grid-template-columns:minmax(0,1fr)}
+  .kv{grid-template-columns:96px 1fr auto}
+  .wbody.rel{grid-template-columns:minmax(0,1fr)}
+  .ctx{margin-top:0}
+  .part{padding:18px}
+}
+
+/* ---- additions: the browser look (this lab runs in a browser, not in Windows Forms) ---- */
+.bbar{display:flex;align-items:center;gap:9px;padding:7px 10px;background:#eceff3;border-bottom:1px solid var(--win-edge)}
+.bdots{display:flex;gap:5px;flex:none}
+.bdots i{width:10px;height:10px;border-radius:50%;background:#d3d3d9;display:block}
+.url{flex:1;min-width:0;background:#fff;border:1px solid var(--win-field-edge);border-radius:999px;padding:3px 12px;
+  font-family:var(--f-win);font-size:12px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.url b{font-weight:600;color:#111}
+.pageui{background:#eef2f7;font-size:12.5px;color:#1f2937}
+.ptop{background:#1f2937;color:#fff;padding:9px 14px;font-weight:700}
+.pwrap{padding:12px 14px;display:grid;gap:10px}
+.pcard{background:#fff;border:1px solid #e0e4ea;border-radius:7px;padding:10px 12px;position:relative}
+.pcard > .pin{position:absolute;right:8px;top:8px}
+.pcard h5{margin:0 0 8px;font:700 13px var(--f-win)}
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.plab{min-width:72px;color:#374151}
+.pfield{background:#fff;border:1px solid #cbd5e1;border-radius:5px;padding:4px 8px;min-height:25px;
+  display:inline-flex;align-items:center;flex:1;min-width:110px;color:#1f2937}
+.pbtn{background:#2563eb;color:#fff;border-radius:5px;padding:5px 15px;display:inline-block;font-weight:600;flex:none}
+.pbtn.light{background:#fff;color:#1f2937;border:1px solid #cbd5e1;font-weight:400}
+.ptbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.ptbl th{background:#f1f5f9;text-align:left;padding:5px 9px;border-bottom:1px solid #e5e7eb;font-weight:600}
+.ptbl td{padding:5px 9px;border-bottom:1px solid #eef1f5}
+.ptbl tr:last-child td{border-bottom:0}
+.pstatus{margin:9px 0 0;color:#14532d;background:#eef7f0;border:1px solid #cfe5d5;border-radius:5px;
+  padding:4px 10px;display:inline-block}
+.palert{background:#dcfce7;border-left:3px solid #16a34a;padding:6px 11px;border-radius:5px;color:#14532d;margin-bottom:9px}
+.perr{color:#b91c1c;font-size:11.5px;display:block;margin:-3px 0 7px 80px}
+/* phpMyAdmin look */
+.pma{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);gap:0}
+.pma-side{background:#f3f3f7;border-right:1px solid var(--win-edge);padding:8px;font-size:12px}
+.pma-side div{padding:2px 4px;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.pma-side .t1{padding-left:16px}
+.pma-side .hl{background:var(--win-hl);border-radius:3px}
+.pma-main{padding:10px 12px;min-width:0}
+.pma-tabs{display:flex;gap:2px;border-bottom:1px solid var(--win-edge);margin-bottom:9px;flex-wrap:wrap;font-size:12px}
+.pma-tabs span{padding:5px 10px;border-bottom:2px solid transparent;color:#444}
+.pma-tabs span.on{border-color:#c75b12;color:#1b1b1b;font-weight:600}
+@media (max-width:640px){ .pma{grid-template-columns:minmax(0,1fr)} .pma-side{border-right:0;border-bottom:1px solid var(--win-edge)} }
+/* VS Code-ish file tree figure */
+.vs{background:#1f1d2b;color:#cfcbe6;font-family:var(--f-mono);font-size:12px}
+.vs .tbar{background:#171522;color:#cfcbe6;border-color:#2c2940}
+.vsbody{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);min-height:0}
+.vstree{padding:10px 8px;border-right:1px solid #2c2940;line-height:1.85}
+.vstree div{white-space:nowrap;padding:0 4px;border-radius:4px}
+.vstree .t1{padding-left:14px}.vstree .t2{padding-left:28px}.vstree .t3{padding-left:42px}
+.vstree .hl{background:#332e4d;color:#fff}
+.vstree .dimv{opacity:.45}
+.vsmain{padding:10px 12px;overflow-x:auto;line-height:1.6}
+.vsmain .c{color:#7f7aa0}
+.vsmain .k{color:#c792ea}
+.vsmain .s{color:#c3e88d}
+@media (max-width:640px){ .vsbody{grid-template-columns:minmax(0,1fr)} .vstree{border-right:0;border-bottom:1px solid #2c2940} }
+
+/* midterm doc: let the long topics table breathe */
+#topics .tbl table{font-size:.86rem}
+#topics .tbl td{vertical-align:top}
+#topics .tbl code{white-space:nowrap}
+#topics .tbl td i{color:var(--muted);font-style:normal;font-size:.92em}
+.step-head .mins{font-weight:700;color:var(--accent);border-color:var(--accent)}
+
+/* ── Lab 2 additions ── */
+
+.cover.solo .lede{max-width:68ch}
+.gh.g6,.gr.g6{grid-template-columns:1.25fr 1.7fr .45fr .45fr .5fr .75fr}
+.gh.g7,.gr.g7{grid-template-columns:.35fr .8fr .9fr 1.7fr .95fr .55fr .5fr}
+.gh span,.gr span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gr.hon{background:rgb(220,242,228)}
+.gr.risk{background:rgb(252,228,226)}
+.fgrid{color:var(--win-ink)}
+.flab.short{min-width:0}
+.ftb.ph{color:#8a8a8a}
+.grow{flex:1 1 10px}
+.legend{font-size:11.5px;color:#6d6d6d;margin:2px 0 6px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.kv2{display:grid;grid-template-columns:100px minmax(0,1fr) auto;gap:8px;align-items:center;margin-bottom:7px}
+.kv2 .ftb{justify-self:start;min-width:0;width:100%}
+.kv2 .ftb[style]{width:auto}
+.ftb.spin{justify-content:space-between}
+.ftb.spin i{font-style:normal;font-size:9px;line-height:1;color:#555;writing-mode:vertical-lr;letter-spacing:-2px}
+.qtabs{display:flex;gap:2px;border-bottom:1px solid var(--win-edge);margin-top:10px}
+.qtabs span{padding:4px 12px;border-bottom:2px solid transparent;color:#444;display:inline-flex;gap:6px;align-items:center}
+.qtabs span.on{border-color:var(--win-pri);color:var(--win-ink);font-weight:600}
+.dlgtext{margin:0 0 6px;font-size:13px}
+.cm{color:#2e7d32;font-style:italic;margin-left:6px}
+.ptabs{display:flex;gap:4px;margin-top:8px}
+.ptabs span{padding:3px 10px;border:1px solid #d0d0d0;border-radius:3px;background:#fff;font-size:12px;display:inline-flex;gap:6px;align-items:center}
+.ptabs span.on{background:var(--win-hl);border-color:var(--win-hl-edge);font-weight:600}
+.pg .pr{grid-template-columns:130px 1fr}
+.caption{font-size:.88rem;color:var(--muted);margin-top:6px;max-width:72ch}
+
+/* diagram */
+.diagram{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:10px}
+.dg-col{display:flex;flex-direction:column;align-items:stretch;gap:6px}
+.dg-box{border:2px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper);display:flex;flex-direction:column;gap:2px;min-width:150px}
+.dg-box b{font-family:var(--f-mono);font-size:.92rem}
+.dg-box small{font-size:.8rem;color:var(--muted)}
+.dg-box.form{border-color:var(--accent)}
+.dg-box.repo{border-color:var(--ok)}
+.dg-box.db{border-color:var(--warn)}
+.dg-ret{color:var(--ok)!important;font-family:var(--f-mono)}
+.dg-arrow{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.dg-arrow.right::after{content:"\2192";font-size:1.4rem;margin-left:4px;color:var(--ink)}
+.dg-arrow.down{flex-direction:column}
+.dg-arrow.down::after{content:"\2193";font-size:1.3rem;color:var(--ink)}
+@media (max-width:720px){
+  .diagram{flex-direction:column;align-items:stretch}
+  .dg-arrow.right::after{content:"\2193"}
+}
+
+/* complete files */
+details.full{border:1px solid var(--line);border-radius:10px;background:var(--card);margin:10px 0}
+details.full > summary{cursor:pointer;padding:10px 14px;font-weight:700}
+details.full[open] > summary{border-bottom:1px solid var(--line)}
+details.full > .code{margin:0;border:0;border-radius:0 0 10px 10px}
+
+.gh.g4,.gr.g4{grid-template-columns:1.1fr 1.2fr .5fr .8fr}
+.chk{font-size:16px;line-height:1;color:var(--win-ink)}
+.cover .fig{margin:0}
+.cover .fbtn{padding:4px 9px}
+.cover .frow{flex-wrap:nowrap}
+</style>
+</head>
+<body>
+<div class="page"><nav class="rail" aria-label="Contents"><p class="rail-h">Contents</p><ol><li class="rail-part">Overview</li><li><a href="#o1"><span>&#9655;</span>What this is</a></li><li><a href="#o2"><span>&#9655;</span>What you build</a></li><li><a href="#o3"><span>&#9655;</span>What is out of scope</a></li><li class="rail-part">Requirements</li><li><a href="#r1"><span>1</span>Project and database</a></li><li><a href="#r2"><span>2</span>The class</a></li><li><a href="#r3"><span>3</span>Test data</a></li><li><a href="#r4"><span>4</span>The repository</a></li><li><a href="#r5"><span>5</span>No user text inside SQL</a></li><li><a href="#r6"><span>6</span>Two windows</a></li><li><a href="#r7"><span>7</span>Working CRUD</a></li><li><a href="#r8"><span>8</span>Search</a></li><li><a href="#r9"><span>9</span>Filter or sort</a></li><li><a href="#r10"><span>10</span>Input checks</a></li><li><a href="#r11"><span>11</span>Code quality</a></li><li class="rail-part">Marking</li><li><a href="#marking"><span>&#9733;</span>How it is marked</a></li><li><a href="#submit"><span>&#10003;</span>What to submit</a></li><li><a href="#dates"><span>&#9670;</span>Dates</a></li><li class="rail-part">Topics</li><li><a href="#topics"><span>&#9776;</span>The 18 topics</a></li><li><a href="#own"><span>&#9734;</span>Your own topic</a></li><li class="rail-part">Help</li><li><a href="#mistakes"><span>?</span>Common mistakes</a></li></ol></nav><main class="main"><header class="cover"><div class="cover-text"><p class="eyebrow">KIU &#183; Object-Oriented Programming (C#) &#183; Midterm</p><h1>Midterm Project Requirements</h1><p class="lede">Build one Windows Forms application that manages a single SQL Server table: list, search, filter, add, edit and delete. You choose the subject from the list of 18, or propose your own. Everything you need was taught in weeks 1 to 7 and practised in Labs 1 and 2.</p><p class="byline">Lasha Iashvili &#183; Kutaisi International University</p><dl class="facts"><div><dt>Weight</dt><dd>25% of the course</dd></div><div><dt>Work</dt><dd>individual, in the computer lab</dd></div><div><dt>Covers</dt><dd>weeks 1&#8211;7, Labs 1&#8211;2</dd></div><div><dt>Deadline</dt><dd>end of your week 9 lab session</dd></div></dl></div><figure class="fig"><div class="shot"><div class="win" style="max-width:470px"><div class="tbar"><span>Library Catalogue</span><span class="wc">&#8211;&nbsp;&nbsp;&#9633;&nbsp;&nbsp;&#10005;</span></div><div class="wbody">
+<div class="frow"><span class="flab short">Search</span><span class="ftb" style="width:84px">orwell</span>
+ <span class="ftb" style="width:70px">Fiction &#9662;</span><span class="grow"></span>
+ <span class="fbtn">Add</span><span class="fbtn">Edit</span><span class="fbtn">Delete</span></div>
+<div class="fgrid">
+ <div class="gh g4"><span>Title</span><span>Author</span><span>Year</span><span>Status</span></div>
+ <div class="gr g4"><span>1984</span><span>George Orwell</span><span>1949</span><span>Available</span></div>
+ <div class="gr g4 risk"><span>Animal Farm</span><span>George Orwell</span><span>1945</span><span>On loan</span></div>
+</div>
+<div class="fstatus">Found 2 of 24</div></div></div></div><figcaption><b>Figure 1.</b> An example submission for topic 1. Your subject will differ, but the six features &#8212; list, search, filter, add, edit, delete &#8212; are the same for everyone.</figcaption></figure></header>
+<section class="step" id="o1"><header class="step-head"><span class="num alt">&#9655;</span><h3>What this is</h3></header><p>Your midterm is one small desktop application that you build on your own, in the computer lab, during weeks 8 and 9. It is worth <b>25 points out of 100</b> for the whole course.</p><div class="two"><div><h4>It is</h4><ul class="tick"><li>Individual. One student, one project.</li><li>Built in Visual Studio 2026 with Windows Forms, C# and SQL Server LocalDB, the same tools as the labs.</li><li>One database table, managed through two windows.</li><li>Marked against the eleven requirements in this document.</li></ul></div><div><h4>It is not</h4><ul class="cross"><li>Group work. Two identical projects both score zero.</li><li>A copy of the Student Registry from Lab 2. That one is the worked example.</li><li>A design competition. Default Windows controls are fine; working code is the point.</li><li>A test of anything taught after week 7.</li></ul></div></div><aside class="note info"><b>Read this document once, all the way through, before you choose a topic.</b><p>Every requirement below is checked when your project is marked. There are no hidden criteria, and there is nothing in the marking table that is not described here.</p></aside></section>
+<section class="step" id="o2"><header class="step-head"><span class="num alt">&#9655;</span><h3>What you build</h3></header><p>Whatever subject you pick, the application does the same six things. Think of the Student Registry from Lab 2, with your own table and your own columns.</p><div class="tbl "><table><thead><tr><th>Feature</th><th>What the user can do</th><th>Practised in</th></tr></thead><tbody><tr><td><b>List</b></td><td>See every row in a grid, with readable column headers</td><td>Lab 1; Lab 2, step 15</td></tr><tr><td><b>Search</b></td><td>Type a word and see only the matching rows</td><td>Lab 1; Lab 2, step 16</td></tr><tr><td><b>Filter or sort</b></td><td>Narrow the list by a category, or change its order</td><td>Lab 2, step 16</td></tr><tr><td><b>Add</b></td><td>Fill a dialog and save a new row</td><td>Lab 2, steps 12 and 17</td></tr><tr><td><b>Edit</b></td><td>Open a row in a pre-filled dialog and save the changes</td><td>Lab 2, step 17</td></tr><tr><td><b>Delete</b></td><td>Remove a row, after confirming</td><td>Lab 2, step 17</td></tr></tbody></table></div><figure class="fig"><div class="shot"><div class="win" style="max-width:470px"><div class="tbar"><span>Solution Explorer</span><span class="wc">&#8211;&nbsp;&nbsp;&#9633;&nbsp;&nbsp;&#10005;</span></div><div class="wbody">
+<div class="tree">
+ <div>&#9662; &#128193; Solution 'LibraryCatalogue' (1 of 1 project)</div>
+ <div class="t1">&#9662; <b>C#</b> LibraryCatalogue</div>
+ <div class="t2">&#9656; &#128193; Dependencies</div>
+ <div class="t2">&nbsp;&nbsp;&nbsp;&#128462; Book.cs <small class="cm">one row of the table</small></div>
+ <div class="t2">&#9656; &#128462; BookForm.cs <small class="cm">add / edit dialog</small></div>
+ <div class="t2">&nbsp;&nbsp;&nbsp;&#128462; BookRepository.cs <small class="cm">all the SQL</small></div>
+ <div class="t2">&nbsp;&nbsp;&nbsp;&#128462; database.sql <small class="cm">builds the database</small></div>
+ <div class="t2">&#9656; &#128462; MainForm.cs <small class="cm">the list window</small></div>
+ <div class="t2">&nbsp;&nbsp;&nbsp;&#128462; Program.cs</div>
+ <div class="t2">&nbsp;&nbsp;&nbsp;&#128462; README.md <small class="cm">how to run it</small></div>
+</div></div></div></div><figcaption><b>Figure 2.</b> The files every project must have. <code>Book</code> will be your own class name. This is the first thing checked when your project is marked.</figcaption></figure></section>
+<section class="step" id="o3"><header class="step-head"><span class="num alt">&#9655;</span><h3>What is out of scope</h3></header><p>The midterm covers <b>weeks 1 to 7 only</b>. Nothing below is required, and you lose nothing by leaving it out.</p><div class="tbl "><table><thead><tr><th>Not required</th><th>Use this instead</th></tr></thead><tbody><tr><td>A second table, foreign keys, <code>JOIN</code></td><td>One table. A category is a text column, not a separate table.</td></tr><tr><td>Login, users, passwords</td><td>Nothing. Whoever opens the program can use it.</td></tr><tr><td>Pictures stored in the database, <code>PictureBox</code> uploads</td><td>Nothing.</td></tr><tr><td>Entity Framework, LINQ to SQL, Dapper</td><td><code>Microsoft.Data.SqlClient</code> with <code>SqlCommand</code> and parameters, as in the labs.</td></tr><tr><td><code>async</code> / <code>await</code>, threads</td><td>Ordinary methods. A small local table answers in milliseconds.</td></tr><tr><td>An installer, publishing, printing, reports</td><td>The project folder, run with F5.</td></tr><tr><td>WPF, MAUI, a web front end</td><td>Windows Forms.</td></tr></tbody></table></div><aside class="note tip"><b>One exception, worth up to 3 bonus points</b><p>Add an <b>Export</b> button that saves the rows currently shown in the grid to a <code>.csv</code> file: a <code>SaveFileDialog</code>, one line per row, and <code>Encoding.UTF8</code> so Georgian letters survive. It earns up to <b>+3</b>. Your total is still capped at 25, so this only helps if you lost points elsewhere. Nothing else earns bonus points.</p></aside><aside class="note warn"><b>Second tables are not rewarded</b><p>A project with two tables and a <code>JOIN</code> does not score higher than a correct one-table project, and it is much easier to get wrong. Build one table well.</p></aside></section>
+<div class="part" id="part-req"><span class="part-tag">Requirements</span><h2>The eleven requirements</h2><p>Each one is checked separately. The "Done when" line at the end of each is exactly what is tested on your machine.</p></div>
+<section class="step" id="r1"><header class="step-head"><span class="num">1</span><h3>Project and database</h3><span class="mins">3 pts</span></header><p>A Windows Forms project of your own, with a SQL Server LocalDB database built by a script that is part of the project.</p><ol class="clicks"><li>A new project, created with <span class="menu">File</span> &#8594; <span class="menu">New</span> &#8594; <span class="menu">Project</span> &#8594; <b>Windows Forms App</b> (C#, not .NET Framework). Not a copy of a lab folder.</li><li>Its own database, named after your subject, for example <code>LibraryDb</code>.</li><li><b>One</b> table, created by a file called <code>database.sql</code> inside the project. A table created only by clicking in SQL Server Object Explorer scores zero for this requirement, because the marker cannot rebuild it.</li><li>An <code>Id INT IDENTITY(1,1) PRIMARY KEY</code> column, plus at least <b>five columns</b> besides <code>Id</code>.</li><li>At least <b>two different column types</b>. All-text tables are not accepted: use at least one <code>INT</code>, <code>DECIMAL</code>, <code>DATE</code>, <code>TIME</code> or <code>BIT</code>.</li><li>The script can be run twice without an error: it checks with <code>IF DB_ID(...) IS NULL</code> and <code>IF OBJECT_ID(...) IS NULL</code> before creating anything.</li></ol><h4>Example &#8212; the shape your script must have</h4><div class="code"><div class="code-bar"><span>database.sql (start)</span><button class="copy" type="button">Copy</button></div><pre><code>IF DB_ID(N'LibraryDb') IS NULL
+    CREATE DATABASE LibraryDb;
+GO
+USE LibraryDb;
+GO
+IF OBJECT_ID(N'dbo.Books', N'U') IS NULL
+CREATE TABLE Books
+(
+    Id            INT IDENTITY(1,1) PRIMARY KEY,
+    Title         NVARCHAR(150) NOT NULL,   -- text
+    Author        NVARCHAR(100) NOT NULL,   -- text
+    Genre         NVARCHAR(50)  NOT NULL,   -- the column you filter by
+    PublishedYear INT           NOT NULL,   -- a number
+    Price         DECIMAL(6,2)  NOT NULL,   -- a decimal
+    IsAvailable   BIT           NOT NULL    -- true / false
+);
+GO</code></pre></div><p class="done"><span>Done when</span>Running <code>database.sql</code> twice in a row gives no error, and SQL Server Object Explorer shows your database, your table and its columns.</p></section>
+<section class="step" id="r2"><header class="step-head"><span class="num">2</span><h3>The class</h3><span class="mins">1 pt</span></header><p>One C# class that describes one row of your table.</p><ol class="clicks"><li>The class name is singular and the table name is its plural: <code>Book</code> &#8594; <code>Books</code>.</li><li>One property per column, with the same name and a matching type (table below).</li><li>At least one <b>calculated</b> property with only a <code>get</code>, worked out from the others and shown in the grid or used for a colour. It is not a column in the database.</li></ol><div class="tbl "><table><thead><tr><th>SQL type</th><th>C# type</th><th>Control in the dialog</th></tr></thead><tbody><tr><td><code>NVARCHAR</code></td><td><code>string</code></td><td><code>TextBox</code>, or <code>ComboBox</code> for a category</td></tr><tr><td><code>INT</code></td><td><code>int</code></td><td><code>NumericUpDown</code>, read as <code>(int)num.Value</code></td></tr><tr><td><code>DECIMAL</code></td><td><code>decimal</code></td><td><code>NumericUpDown</code> with <code>DecimalPlaces</code></td></tr><tr><td><code>DATE</code></td><td><code>DateTime</code></td><td><code>DateTimePicker</code>, <code>Format = Short</code></td></tr><tr><td><code>TIME</code></td><td><code>TimeSpan</code></td><td><code>DateTimePicker</code>, <code>Format = Time</code>, read <code>.Value.TimeOfDay</code></td></tr><tr><td><code>BIT</code></td><td><code>bool</code></td><td><code>CheckBox</code>, read <code>.Checked</code></td></tr></tbody></table></div><div class="code"><div class="code-bar"><span>Book.cs</span><button class="copy" type="button">Copy</button></div><pre><code>namespace LibraryCatalogue
+{
+    public class Book
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public string Genre { get; set; }
+        public int PublishedYear { get; set; }
+        public decimal Price { get; set; }
+        public bool IsAvailable { get; set; }
+
+        // calculated: not a column, worked out from the values above
+        public string Availability
+        {
+            get { return IsAvailable ? "Available" : "On loan"; }
+        }
+    }
+}</code></pre></div><p class="done"><span>Done when</span>The project builds, and the grid shows a column for your calculated property.</p></section>
+<section class="step" id="r3"><header class="step-head"><span class="num">3</span><h3>Test data</h3><span class="mins">2 pts</span></header><p>Your project must fill itself with data. The marker will not type rows in by hand.</p><ol class="clicks"><li><code>INSERT</code> statements at the end of the same <code>database.sql</code>, guarded by <code>IF NOT EXISTS (SELECT 1 FROM Books)</code> so a second run does not double them.</li><li>At least <b>15 rows</b> of realistic data. Not <code>test1</code>, <code>test2</code>, <code>aaa</code>.</li><li>The values in the column you filter by must be spread out &#8212; at least <b>three different categories</b>, so filtering visibly changes the list.</li><li>At least <b>three rows</b> must share a word, so searching visibly changes the list.</li><li>Georgian text is welcome. Write <code>N'...'</code> before every text value, or it turns into question marks.</li></ol><h4>The marker does exactly this, on a computer that has never seen your database</h4><ol class="clicks"><li>Opens <span class="menu">View</span> &#8594; <span class="menu">SQL Server Object Explorer</span>, right-clicks <code>(localdb)\MSSQLLocalDB</code> &#8594; <span class="menu">New Query</span>, pastes your <code>database.sql</code> and runs it.</li><li>Opens your <code>.sln</code> file.</li><li><span class="menu">Build</span> &#8594; <span class="menu">Rebuild Solution</span>, then <kbd>F5</kbd>.</li></ol><aside class="note bad"><b>This is the most common way to lose points</b><p>If those three steps do not produce a working program with data in it, requirements 1, 3 and everything that depends on them fail together. Test it before you submit: in SQL Server Object Explorer right-click your database &#8594; <b>Delete</b>, tick <b>Close existing connections</b>, then run your script again and press F5. That is exactly what the marker does.</p></aside><p class="done"><span>Done when</span>The three steps above, on a LocalDB without your database, give you a grid with 15 or more rows.</p></section>
+<section class="step" id="r4"><header class="step-head"><span class="num">4</span><h3>The repository</h3><span class="mins">2 pts</span></header><p>One class that holds all the SQL, exactly like <code>StudentRepository</code> in Lab 2.</p><ol class="clicks"><li>A class called <code>BookRepository</code> (your own name), with public methods for <b>search</b>, <b>add</b>, <b>update</b> and <b>delete</b>.</li><li>The connection string is written <b>once</b>, in this class. Its server is <code>(localdb)\MSSQLLocalDB</code> and its <code>Initial Catalog</code> is your database.</li><li>Every <code>SqlConnection</code>, <code>SqlCommand</code> and <code>SqlDataReader</code> is inside a <code>using</code>.</li><li>The methods take and return your class: <code>List&lt;Book&gt;</code>, <code>Book</code>, an <code>int</code> id. Never a <code>DataTable</code> and never a control.</li><li>No form contains <code>SqlConnection</code>, <code>SqlCommand</code> or a line of SQL.</li></ol><div class="code"><div class="code-bar"><span>BookRepository.cs — search and count (add, update and delete follow the same pattern)</span><button class="copy" type="button">Copy</button></div><pre><code>using Microsoft.Data.SqlClient;
+
+namespace LibraryCatalogue
+{
+    public class BookRepository
+    {
+        private readonly string connectionString =
+            @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LibraryDb;" +
+            "Integrated Security=True;TrustServerCertificate=True";
+
+        public List&lt;Book&gt; Search(string text, string genre)
+        {
+            List&lt;Book&gt; books = new List&lt;Book&gt;();
+            string sql =
+                "SELECT Id, Title, Author, Genre, PublishedYear, Price, IsAvailable " +
+                "FROM Books " +
+                "WHERE (@text = N'' OR Title LIKE @pattern OR Author LIKE @pattern) " +
+                "  AND (@genre = N'' OR Genre = @genre) " +
+                "ORDER BY Title";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue("@text", text);
+                command.Parameters.AddWithValue("@pattern", "%" + text + "%");
+                command.Parameters.AddWithValue("@genre", genre);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Book book = new Book();
+                        book.Id = (int)reader["Id"];
+                        book.Title = (string)reader["Title"];
+                        book.Author = (string)reader["Author"];
+                        book.Genre = (string)reader["Genre"];
+                        book.PublishedYear = (int)reader["PublishedYear"];
+                        book.Price = (decimal)reader["Price"];
+                        book.IsAvailable = (bool)reader["IsAvailable"];
+                        books.Add(book);
+                    }
+                }
+            }
+            return books;
+        }
+
+        public int CountAll()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Books", connection))
+            {
+                connection.Open();
+                return (int)command.ExecuteScalar();
+            }
+        }
+    }
+}</code></pre></div><p class="done"><span>Done when</span><span class="menu">Edit</span> &#8594; <span class="menu">Find and Replace</span> &#8594; <span class="menu">Find in Files</span> (<kbd>Ctrl+Shift+F</kbd>) for <code>SqlConnection</code> finds it only in the repository.</p></section>
+<section class="step" id="r5"><header class="step-head"><span class="num">5</span><h3>No user text inside SQL</h3><span class="mins">2 pts</span></header><p>Everything the user types reaches SQL Server as a <b>parameter</b>, never as part of the SQL text.</p><ol class="clicks"><li>Every value from a <code>TextBox</code>, <code>ComboBox</code>, <code>NumericUpDown</code>, <code>DateTimePicker</code> or <code>CheckBox</code> is passed with <code>command.Parameters.AddWithValue("@name", value)</code>.</li><li>No SQL string is joined with <code>+</code> to a value the user can change, and no <code>$"...{text}..."</code> inside SQL.</li><li>If you offer sorting (requirement 9, option B), the column name comes from a fixed list in your code, chosen by <code>SelectedIndex</code>. A column name cannot be a parameter, so it must never come from the user.</li></ol><h4>Right and wrong</h4><div class="code"><div class="code-bar"><span>Right and wrong</span><button class="copy" type="button">Copy</button></div><pre><code>// WRONG — the user's text becomes part of the SQL
+string sql = "SELECT * FROM Books WHERE Title LIKE '%" + txtSearch.Text + "%'";
+
+// RIGHT — the text is a value, not SQL
+string sql = "SELECT * FROM Books WHERE Title LIKE @pattern";
+command.Parameters.AddWithValue("@pattern", "%" + txtSearch.Text + "%");</code></pre></div><p class="done"><span>Done when</span>Searching for <code>' OR 1=1 --</code> shows no rows and no error.</p></section>
+<section class="step" id="r6"><header class="step-head"><span class="num">6</span><h3>Two windows</h3><span class="mins">3 pts</span></header><p>A main window with the list, and one dialog used both for adding and for editing.</p><ol class="clicks"><li><code>Form1</code> is renamed to <code>MainForm</code>, with Visual Studio renaming the references (Lab 2, step 5).</li><li>A second form, for example <code>BookForm</code>, with <b>two constructors</b>: an empty one for <b>Add</b> and one that receives a <code>Book</code> for <b>Edit</b>, calling <code>: this()</code>.</li><li>Each column has the control that fits its type (table in requirement 2). A category column uses a <code>ComboBox</code> with <code>DropDownStyle = DropDownList</code>, so nobody can type a fourth category by mistake.</li><li>Every control you use in code has a real name with a prefix: <code>txtTitle</code>, <code>cmbGenre</code>, <code>numPrice</code>, <code>dtpPurchased</code>, <code>chkAvailable</code>, <code>btnSave</code>, <code>dgvBooks</code>, <code>lblStatus</code>.</li><li>In the dialog, <code>AcceptButton</code> is the Save button and <code>CancelButton</code> is the Cancel button. Save sets <code>DialogResult = DialogResult.OK</code>.</li><li>In the main window, the grid has <code>Anchor = Top, Bottom, Left, Right</code>, so it grows with the window. The <code>Id</code> column is hidden and the headers are readable words, not <code>PublishedYear</code>.</li><li><b>One visual rule</b> that depends on the data: a row colour set in <code>CellFormatting</code>, or a calculated property that shows a word instead of <code>True</code>/<code>False</code>.</li></ol><figure class="fig"><div class="shot"><div class="win" style="max-width:380px"><div class="tbar"><span>Edit book</span><span class="wc">&#8211;&nbsp;&nbsp;&#9633;&nbsp;&nbsp;&#10005;</span></div><div class="wbody">
+<div class="kv2"><span>Title</span><span class="ftb">Animal Farm</span></div>
+<div class="kv2"><span>Author</span><span class="ftb">George Orwell</span></div>
+<div class="kv2"><span>Genre</span><span class="ftb" style="width:120px">Fiction &#9662;</span></div>
+<div class="kv2"><span>Year</span><span class="ftb spin" style="width:72px">1945 <i>&#9652;&#9662;</i></span></div>
+<div class="kv2"><span>Price</span><span class="ftb spin" style="width:72px">18.50 <i>&#9652;&#9662;</i></span></div>
+<div class="kv2"><span>Available</span><span class="chk">&#9744;</span></div>
+<div class="btns"><span class="fbtn pri">Save</span><span class="fbtn">Cancel</span></div></div></div></div><figcaption><b>Figure 3.</b> The dialog in Edit mode: a TextBox for text, a ComboBox for the category, NumericUpDown for numbers, a CheckBox for a BIT column.</figcaption></figure><h4>The visual rule &#8212; one example that counts</h4><div class="code"><div class="code-bar"><span>MainForm.cs</span><button class="copy" type="button">Copy</button></div><pre><code>private void dgvBooks_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+{
+    Book book = dgvBooks.Rows[e.RowIndex].DataBoundItem as Book;
+    if (book != null &amp;&amp; !book.IsAvailable)
+        e.CellStyle.BackColor = Color.FromArgb(252, 228, 226);
+}</code></pre></div><aside class="note warn"><b>CellFormatting is not a double-click event</b><p>Connect it from the &#9889; Events list in the Properties window (Lab 2, step 14). If the method exists but nothing changes colour, it is not connected.</p></aside><p class="done"><span>Done when</span>Dragging the window corner grows the grid; in the dialog, <kbd>Enter</kbd> saves and <kbd>Esc</kbd> cancels; and at least one row looks different because of its data.</p></section>
+<section class="step" id="r7"><header class="step-head"><span class="num">7</span><h3>Working CRUD</h3><span class="mins">6 pts</span></header><p>The four operations, all saving to SQL Server. This is the largest single block of marks.</p><ol class="clicks"><li><b>Create</b> &#8212; <b>Add</b> opens the empty dialog; Save adds the row, and the grid shows it immediately, without restarting.</li><li><b>Read</b> &#8212; the grid shows every column that matters, when the program opens.</li><li><b>Edit</b> &#8212; <b>Edit</b>, or a double-click on a row, opens the dialog <b>already filled in</b> with that row&#39;s values. Saving changes only that row.</li><li><b>Delete</b> &#8212; asks first with <code>MessageBoxButtons.YesNo</code>. <b>No</b> deletes nothing.</li><li><b>Cancel</b> or the &#10005; in the dialog changes nothing. Check <code>form.ShowDialog() == DialogResult.OK</code> before saving.</li><li>Edit or Delete with no row selected shows a message instead of crashing.</li><li>A <b>status message</b> after each of the three actions: added, updated, deleted. A <code>Label</code> under the grid is enough.</li></ol><div class="code"><div class="code-bar"><span>MainForm.cs — the pattern for Edit</span><button class="copy" type="button">Copy</button></div><pre><code>private void btnEdit_Click(object sender, EventArgs e)
+{
+    if (dgvBooks.CurrentRow == null) return;
+    Book selected = (Book)dgvBooks.CurrentRow.DataBoundItem;
+
+    using (BookForm form = new BookForm(selected))
+    {
+        if (form.ShowDialog() == DialogResult.OK)
+        {
+            repository.Update(form.CurrentBook);
+            lblStatus.Text = "Book updated.";
+        }
+    }
+    LoadBooks();
+}</code></pre></div><aside class="note warn"><b>Changes that vanish</b><p>If a row appears in the grid but is gone after a restart, you added it to the list and never called the repository. The grid shows what is in memory; only the repository writes to the database.</p></aside><p class="done"><span>Done when</span>You add a row, edit it, delete it, then close the program and press F5 again &#8212; and the grid agrees with what you did.</p></section>
+<section class="step" id="r8"><header class="step-head"><span class="num">8</span><h3>Search</h3><span class="mins">3 pts</span></header><p>A search box above the grid that narrows the list by text.</p><ol class="clicks"><li>A <code>TextBox</code> above the grid. Results either change while typing (<code>TextChanged</code>, as in Lab 2) or after a <b>Search</b> button; both are accepted.</li><li>It searches at least <b>one</b> text column with <code>LIKE</code>. Searching two columns with <code>OR</code> is better and is expected for full marks.</li><li>An empty box shows everything. An empty box must not cause an error.</li><li>No match shows a message, for example <i>"No books match your search."</i>, not just an empty grid.</li><li>The search text is passed as a parameter. See requirement 5.</li></ol><aside class="note tip"><b>Two text columns, grouped</b><p>When you search two columns and also filter, wrap the two <code>LIKE</code> conditions in brackets, or the <code>OR</code> cancels the filter:<div class="code"><div class="code-bar"><span>SQL</span><button class="copy" type="button">Copy</button></div><pre><code>WHERE (@text = N'' OR Title LIKE @pattern OR Author LIKE @pattern)
+  AND (@genre = N'' OR Genre = @genre)</code></pre></div></p></aside><p class="done"><span>Done when</span>A word that exists in three rows returns exactly those three, and clearing the box brings everything back.</p></section>
+<section class="step" id="r9"><header class="step-head"><span class="num">9</span><h3>Filter or sort</h3><span class="mins">1 pt</span></header><p>One more way to change what the list shows. Choose <b>either</b> of these.</p><div class="two"><div><h4>Option A &#8212; filter</h4><p>A <code>ComboBox</code> with the categories of one column and an <b>All</b> item first. Choosing one shows only those rows; <b>All</b> shows everything. As in Lab 2, the year filter.</p></div><div><h4>Option B &#8212; sort</h4><p>A <code>ComboBox</code> labelled <b>Sort by</b>, with at least three choices (for example <i>Title A&#8211;Z</i>, <i>Newest first</i>, <i>Cheapest first</i>). Each choice maps to a fixed <code>ORDER BY</code> written in your code.</p></div></div><aside class="note warn"><b>Search and filter must work together</b><p>Typing <code>orwell</code> and then choosing <b>Fiction</b> must apply <b>both</b>, not replace one with the other. Send both values to one repository method that builds one query, as <code>Search(text, genre)</code> does above.</p></aside><p class="done"><span>Done when</span>Search and filter are both active at the same time, and the grid shows only rows that match both.</p></section>
+<section class="step" id="r10"><header class="step-head"><span class="num">10</span><h3>Input checks</h3><span class="mins">1 pt</span></header><p>The dialog refuses obviously wrong data before it reaches the database.</p><ol class="clicks"><li>Required text fields cannot be empty or only spaces: check with <code>string.IsNullOrWhiteSpace</code>.</li><li>Every <code>NumericUpDown</code> has a sensible <code>Minimum</code> and <code>Maximum</code> (no year 0, no negative price).</li><li>At least <b>one rule of your own</b> that fits your subject: an end date after the start date, a year not in the future, a phone number with at least 9 digits, an e-mail with <code>@</code>.</li><li>A failed check shows a <code>MessageBox</code> that says what is wrong, and the dialog <b>stays open</b> with what the user typed. Use <code>return;</code>, as in Lab 2, step 12.</li></ol><p class="done"><span>Done when</span>Clicking Save with an empty required field shows a message, the dialog stays open, and nothing is saved.</p></section>
+<section class="step" id="r11"><header class="step-head"><span class="num">11</span><h3>Code quality and README</h3><span class="mins">1 pt</span></header><ol class="clicks"><li>Real names for everything: <code>books</code>, <code>searchText</code>, <code>selectedBook</code>. Not <code>a</code>, <code>x</code>, <code>list1</code>.</li><li>No control left with a default name (<code>textBox1</code>, <code>button1</code>, <code>dataGridView1</code>). See the deductions.</li><li>Consistent indentation. <span class="menu">Edit</span> &#8594; <span class="menu">Advanced</span> &#8594; <span class="menu">Format Document</span> (<kbd>Ctrl+K</kbd> <kbd>Ctrl+D</kbd>) fixes it for you.</li><li>No commented-out blocks of dead code, no empty event methods left over from accidental double-clicks, and no test <code>MessageBox</code>es.</li><li>A <code>README.md</code> next to the <code>.sln</code> file with: the project name, one paragraph on what it does, the list of columns, and the exact steps to run it.</li></ol><h4>README.md &#8212; the minimum</h4><div class="code"><div class="code-bar"><span>README.md</span><button class="copy" type="button">Copy</button></div><pre><code># Library Catalogue
+
+Keeps a catalogue of books. You can list them, search by title or
+author, filter by genre, and add, edit or delete a book.
+
+## Table: Books
+Id, Title, Author, Genre, PublishedYear, Price, IsAvailable
+
+## How to run it
+1. Visual Studio 2026 -&gt; View -&gt; SQL Server Object Explorer
+2. Right-click (localdb)\MSSQLLocalDB -&gt; New Query
+3. Paste LibraryCatalogue/database.sql and press Execute
+4. Open LibraryCatalogue.sln
+5. Build -&gt; Rebuild Solution, then F5</code></pre></div><aside class="note info"><b>Removing an empty event method</b><p>Do not just delete the method: the <code>.Designer.cs</code> file still refers to it and the build fails. Open the &#9889; Events list, right-click the event name &#8594; <b>Reset</b>, then delete the method.</p></aside><p class="done"><span>Done when</span>Somebody who has never seen your project can run it by following your README alone.</p></section>
+<div class="part" id="part-mark"><span class="part-tag">Marking</span><h2>How your 25 points are earned</h2><p>Each requirement is checked on your own computer, in order, during the demo.</p></div>
+<section class="step" id="marking"><header class="step-head"><span class="num alt">&#9733;</span><h3>The marking table</h3></header><div class="tbl "><table><thead><tr><th>#</th><th>Requirement</th><th>Points</th><th>Full marks when</th></tr></thead><tbody><tr><td>1</td><td>Project and database</td><td>3</td><td><code>database.sql</code> builds one table with 5+ columns and 2+ types, and runs twice without error</td></tr><tr><td>2</td><td>The class</td><td>1</td><td>One property per column with matching types, plus a calculated property</td></tr><tr><td>3</td><td>Test data</td><td>2</td><td>The script inserts 15+ realistic rows, with 3+ categories</td></tr><tr><td>4</td><td>The repository</td><td>2</td><td>All SQL in one class, one connection string, every connection in <code>using</code></td></tr><tr><td>5</td><td>No user text inside SQL</td><td>2</td><td>Parameters everywhere; <code>' OR 1=1 --</code> finds nothing</td></tr><tr><td>6</td><td>Two windows</td><td>3</td><td>Main window + one add/edit dialog, named controls, Accept/Cancel buttons, anchored grid, one visual rule</td></tr><tr><td>7</td><td>Working CRUD</td><td>6</td><td>All four operations persist; Cancel changes nothing; delete asks first; status messages</td></tr><tr><td>8</td><td>Search</td><td>3</td><td>Two columns searched, empty box shows all, no-match message</td></tr><tr><td>9</td><td>Filter or sort</td><td>1</td><td>Works, and works together with search</td></tr><tr><td>10</td><td>Input checks</td><td>1</td><td>Required fields, sensible ranges, one rule of your own; the dialog stays open</td></tr><tr><td>11</td><td>Code quality and README</td><td>1</td><td>Real names, clean code, a README someone else can follow</td></tr><tr><td></td><td><b>Total</b></td><td><b>25</b></td><td></td></tr><tr><td>+</td><td>Bonus &#8212; export to CSV</td><td>+3</td><td>The shown rows are saved to a <code>.csv</code> that opens in Excel with correct letters. The total is still capped at 25.</td></tr></tbody></table></div><h4>Deductions</h4><div class="tbl "><table><thead><tr><th>Problem</th><th>Deduction</th></tr></thead><tbody><tr><td>The three steps in requirement 3 do not produce a working program</td><td>the whole midterm scores 0</td></tr><tr><td>The project is the Student Registry from Lab 2, or is the same as another student&#39;s</td><td>0 for everyone involved</td></tr><tr><td>You cannot explain your own code at the demo</td><td>0</td></tr><tr><td>User text joined into SQL with <code>+</code> or <code>$"..."</code></td><td>&#8722;5 per place</td></tr><tr><td>SQL or a <code>SqlConnection</code> inside a form instead of the repository</td><td>&#8722;2 per place</td></tr><tr><td>A control used in code that still has a default name (<code>textBox1</code>, <code>button1</code>&#8230;)</td><td>&#8722;2 each</td></tr><tr><td>The <code>bin</code> or <code>obj</code> folder is in the ZIP</td><td>&#8722;2</td></tr><tr><td>Submitted after the deadline</td><td>&#8722;5 per started day; 0 after three days</td></tr></tbody></table></div><aside class="note warn"><b>The demo is part of the mark</b><p>At the end of the week 9 session you show your program at your computer for five minutes: the six features, then two questions about lines of your own code &#8212; for example <i>"why is there <code>: this()</code> here?"</i> or <i>"what happens if the search box is empty?"</i>. A project you cannot explain is not your project.</p></aside></section>
+<section class="step" id="submit"><header class="step-head"><span class="num alt">&#10003;</span><h3>What to submit</h3></header><ol class="clicks"><li>A ZIP of the solution folder, named <code>Midterm_Surname_Firstname.zip</code>.</li><li><b>Delete the <code>bin</code> and <code>obj</code> folders first</b> &#8212; Visual Studio rebuilds them with one click, and they make the file many times larger. Close Visual Studio before deleting them, or Windows will refuse.</li><li><code>database.sql</code> inside the project folder (requirements 1 and 3).</li><li><code>README.md</code> next to the <code>.sln</code> file (requirement 11).</li><li>Four screenshots in a folder called <code>screenshots</code>: the main window, a search result, the dialog in Add mode, the dialog in Edit mode.</li><li>Upload everything to the LMS before you leave the lab at the end of your week 9 session. Email submissions are not accepted.</li></ol><h4>Check before you upload</h4><ul class="checks"><li><span class="menu">Rebuild Solution</span> shows 0 errors</li><li>Deleting the database and running <code>database.sql</code> gives 15+ rows after F5</li><li>Add, edit and delete all survive closing and reopening the program</li><li>Cancel in the dialog changes nothing</li><li>A word that exists in three rows finds exactly three</li><li>Search and filter work at the same time</li><li><code>' OR 1=1 --</code> finds nothing and shows no error</li><li>No <code>textBox1</code> or <code>button1</code> left</li><li>The <code>bin</code> and <code>obj</code> folders are not in the ZIP</li></ul><aside class="note tip"><b>Test it the way it will be marked</b><p>Copy your ZIP to a different folder, unpack it, delete your database in SQL Server Object Explorer, and follow your own README from line 1. Most lost points come from a project that works only on the computer it was written on.</p></aside></section>
+<section class="step" id="dates"><header class="step-head"><span class="num alt">&#9670;</span><h3>Dates</h3></header><div class="tbl "><table><thead><tr><th>When</th><th>What</th></tr></thead><tbody><tr><td>Week 7, from today</td><td>Topic sign-up sheet open on the LMS. First come, first served; <b>at most two students per topic</b>.</td></tr><tr><td>Sunday 1 November, 23:59</td><td>Topic locked. Free-topic proposals must be approved by this time (see the last section).</td></tr><tr><td>Week 8 lab session (2&#8211;8 November)</td><td>You build it in the lab. No new material is taught; ask questions. You may continue at home between the two sessions.</td></tr><tr><td>Week 9 lab session (9&#8211;15 November)</td><td>You finish it, show it in a five-minute demo, and upload it to the LMS <b>before the session ends</b>. That is the deadline.</td></tr></tbody></table></div><aside class="note info"><b>Why the topic is locked before week 8</b><p>So that two people do not build the same project and then both score zero, and so that free topics can be checked for the right size before you start.</p></aside></section>
+<div class="part" id="part-topics"><span class="part-tag">Topics</span><h2>The eighteen topics</h2><p>Each one is a single table. The columns are a starting point: you may add a column or rename one, as long as the table still meets requirement 1. Every table also has <code>Id INT IDENTITY(1,1) PRIMARY KEY</code>.</p></div>
+<section class="step" id="topics"><header class="step-head"><span class="num alt">&#9776;</span><h3>Choose one</h3></header><div class="tbl "><table><thead><tr><th>#</th><th>Project &#183; table</th><th>Columns besides Id</th><th>Search by</th><th>Filter by</th></tr></thead><tbody><tr><td>1</td><td><b>Library Catalogue</b><br><code>Books</code></td><td>Title, Author, Genre, PublishedYear <i>(INT)</i>, Price <i>(DECIMAL)</i>, IsAvailable <i>(BIT)</i></td><td>Title, Author</td><td>Genre</td></tr><tr><td>2</td><td><b>Lab Equipment Inventory</b><br><code>Equipment</code></td><td>Name, InventoryNumber, Room, Condition <i>(New / Good / Broken)</i>, PurchaseDate <i>(DATE)</i>, Price <i>(DECIMAL)</i></td><td>Name, InventoryNumber</td><td>Condition</td></tr><tr><td>3</td><td><b>Cafeteria Menu</b><br><code>Dishes</code></td><td>Name, Category <i>(Soup / Main / Salad / Dessert / Drink)</i>, Price <i>(DECIMAL)</i>, Calories <i>(INT)</i>, IsVegetarian <i>(BIT)</i></td><td>Name</td><td>Category</td></tr><tr><td>4</td><td><b>Film Catalogue</b><br><code>Films</code></td><td>Title, Director, Genre, ReleaseYear <i>(INT)</i>, DurationMinutes <i>(INT)</i>, Rating <i>(DECIMAL(3,1))</i></td><td>Title, Director</td><td>Genre</td></tr><tr><td>5</td><td><b>Gym Members</b><br><code>Members</code></td><td>FullName, Phone, MembershipPlan <i>(Monthly / Quarterly / Annual)</i>, StartDate <i>(DATE)</i>, EndDate <i>(DATE)</i>, IsActive <i>(BIT)</i></td><td>FullName, Phone</td><td>MembershipPlan</td></tr><tr><td>6</td><td><b>Car Rental Fleet</b><br><code>Cars</code></td><td>PlateNumber, Make, Model, ProductionYear <i>(INT)</i>, DailyRate <i>(DECIMAL)</i>, Status <i>(Available / Rented / Service)</i></td><td>PlateNumber, Make</td><td>Status</td></tr><tr><td>7</td><td><b>Pharmacy Stock</b><br><code>Medicines</code></td><td>Name, Manufacturer, DosageForm <i>(Tablet / Syrup / Injection)</i>, Price <i>(DECIMAL)</i>, Quantity <i>(INT)</i>, ExpiryDate <i>(DATE)</i></td><td>Name, Manufacturer</td><td>DosageForm</td></tr><tr><td>8</td><td><b>Job Vacancy Board</b><br><code>Vacancies</code></td><td>Position, Company, City, SalaryFrom <i>(INT)</i>, EmploymentType <i>(Full-time / Part-time / Remote)</i>, PostedOn <i>(DATE)</i></td><td>Position, Company</td><td>EmploymentType</td></tr><tr><td>9</td><td><b>Hotel Rooms</b><br><code>Rooms</code></td><td>RoomNumber, RoomType <i>(Single / Double / Suite)</i>, Floor <i>(INT)</i>, PricePerNight <i>(DECIMAL)</i>, Status <i>(Free / Occupied / Cleaning)</i>, HasBalcony <i>(BIT)</i></td><td>RoomNumber</td><td>RoomType or Status</td></tr><tr><td>10</td><td><b>Veterinary Patients</b><br><code>Patients</code></td><td>AnimalName, Species <i>(Dog / Cat / Bird / Other)</i>, Breed, OwnerName, OwnerPhone, LastVisit <i>(DATE)</i></td><td>AnimalName, OwnerName</td><td>Species</td></tr><tr><td>11</td><td><b>Music Album Catalogue</b><br><code>Albums</code></td><td>Title, Artist, Genre, ReleaseYear <i>(INT)</i>, TrackCount <i>(INT)</i>, DurationMinutes <i>(INT)</i></td><td>Title, Artist</td><td>Genre</td></tr><tr><td>12</td><td><b>Conference Talks</b><br><code>Talks</code></td><td>Title, Speaker, Track <i>(Web / AI / Security / Data)</i>, DurationMinutes <i>(INT)</i>, Status <i>(Submitted / Accepted / Rejected)</i>, SubmittedOn <i>(DATE)</i></td><td>Title, Speaker</td><td>Track or Status</td></tr><tr><td>13</td><td><b>Bus Timetable</b><br><code>BusRoutes</code></td><td>RouteNumber, Origin, Destination, DepartureTime <i>(TIME)</i>, DurationMinutes <i>(INT)</i>, Price <i>(DECIMAL)</i>, IsExpress <i>(BIT)</i></td><td>Origin, Destination</td><td>IsExpress</td></tr><tr><td>14</td><td><b>Electronics Repair Shop</b><br><code>Repairs</code></td><td>Device, CustomerName, CustomerPhone, Problem, Status <i>(Received / In progress / Ready / Collected)</i>, ReceivedOn <i>(DATE)</i>, Price <i>(DECIMAL)</i></td><td>CustomerName, Device</td><td>Status</td></tr><tr><td>15</td><td><b>Plant Nursery</b><br><code>Plants</code></td><td>Name, Species, Category <i>(Indoor / Outdoor / Tree / Flower)</i>, Price <i>(DECIMAL)</i>, HeightCm <i>(INT)</i>, InStock <i>(INT)</i></td><td>Name, Species</td><td>Category</td></tr><tr><td>16</td><td><b>Sports Team Roster</b><br><code>Players</code></td><td>FullName, Position, ShirtNumber <i>(INT)</i>, BirthYear <i>(INT)</i>, City, HeightCm <i>(INT)</i></td><td>FullName, City</td><td>Position</td></tr><tr><td>17</td><td><b>Recipe Collection</b><br><code>Recipes</code></td><td>Title, Cuisine <i>(Georgian / Italian / Asian / Other)</i>, Difficulty <i>(Easy / Medium / Hard)</i>, PrepMinutes <i>(INT)</i>, Servings <i>(INT)</i>, IsVegetarian <i>(BIT)</i></td><td>Title</td><td>Cuisine or Difficulty</td></tr><tr><td>18</td><td><b>Parking Permits</b><br><code>Permits</code></td><td>PlateNumber, OwnerName, PermitType <i>(Student / Staff / Guest)</i>, Zone, ValidUntil <i>(DATE)</i>, IsPaid <i>(BIT)</i></td><td>PlateNumber, OwnerName</td><td>PermitType</td></tr></tbody></table></div><aside class="note warn"><b>The "filter by" column is the one that must repeat</b><p>In your script, spread the 15 rows across at least three values of that column. A table where all 15 books are Fiction makes the filter look broken even when the code is right. For topic 13 the filter is a <code>BIT</code>: the ComboBox has <i>All</i>, <i>Express</i>, <i>Regular</i>, and both values must appear in the data.</p></aside><aside class="note info"><b>Hard and easy ones</b><p>They are all the same amount of work &#8212; one table, six features. Topics 3, 11, 16 and 17 have the simplest data to invent. Topic 13 needs a <code>TIME</code> column, which C# reads as a <code>TimeSpan</code>; topic 14 needs a little more thought in the test data.</p></aside></section>
+<section class="step" id="own"><header class="step-head"><span class="num alt">&#9734;</span><h3>Your own topic</h3></header><p>You may propose a subject of your own instead of choosing from the list. It is marked against exactly the same eleven requirements, so an approved free topic is neither easier nor harder.</p><h4>Rules</h4><ul class="tick"><li><b>One table.</b> No foreign keys, no second table.</li><li>At least <b>five columns</b> besides <code>Id</code>, of at least <b>two different types</b>.</li><li>At least <b>one text column</b> that is worth searching &#8212; a name, a title, a person.</li><li>At least <b>one category column</b> with three or more repeating values, to filter by.</li><li>You can invent <b>15 realistic rows</b> for it. If you cannot, the subject is too narrow.</li><li>It is not the Student Registry from Lab 2, and not a near-copy of a topic already taken.</li></ul><h4>How to propose it</h4><ol class="clicks"><li>Write the proposal below in one message.</li><li>Email it to <code>lasha.iashvili@kiu.edu.ge</code> with the subject <code>C# midterm topic &#8212; Surname Firstname</code>.</li><li>Wait for the reply. <b>An unapproved topic is not accepted</b>, however good the project is.</li><li>The deadline for approval is <b>Sunday 1 November, 23:59</b>. Send it early; you may be asked to change something.</li></ol><h4>The proposal &#8212; copy this shape</h4><div class="code"><div class="code-bar"><span>Proposal</span><button class="copy" type="button">Copy</button></div><pre><code>Project name:  Bicycle Workshop
+Table:         Bicycles
+Columns:       Brand        NVARCHAR(60)
+               Model        NVARCHAR(60)
+               FrameSize    NVARCHAR(10)   -&gt; the filter column (S / M / L / XL)
+               WheelInch    INT
+               Price        DECIMAL(8,2)
+               IsElectric   BIT
+Search by:     Brand, Model
+Filter by:     FrameSize
+In one line:   A workshop keeps the bicycles it has for sale, finds one
+               by brand or model, and filters by frame size.</code></pre></div><div class="two"><div><h4>Approved without question</h4><ul class="tick"><li>Anything with one clear thing you can count: tools, tickets, plants, courses, invoices, matches</li><li>Something from your own life &#8212; your team, your collection, your workplace</li><li>A subject in Georgian, as long as the table and column names are in English</li></ul></div><div><h4>Refused</h4><ul class="cross"><li>A chat, a forum, anything with users and passwords</li><li>A shop with a basket or orders &#8212; that is two tables</li><li>Anything with a login screen</li><li>Anything that stores photos</li></ul></div></div><aside class="note warn"><b>The usual mistake with a free topic</b><p>Students pick something they are excited about and it quietly needs two tables &#8212; orders and products, teams and players, invoices and items. If your one-line description contains the word "and" joining two kinds of thing, it is two tables. Keep the one you care about and drop the other.</p></aside></section>
+<div class="part" id="part-help"><span class="part-tag">Help</span><h2>Common mistakes</h2><p>Almost every error students meet in this project is one of these.</p></div>
+<section class="step" id="mistakes"><header class="step-head"><span class="num alt">?</span><h3>Common mistakes</h3></header><div class="tbl "><table><thead><tr><th>What happens</th><th>Why</th><th>Fix</th></tr></thead><tbody><tr><td>It works for you, scores 0 for the marker</td><td>The table was made by clicking, so <code>database.sql</code> is missing or incomplete</td><td>Delete your database and rebuild it from the script yourself (requirement 3)</td></tr><tr><td><i>Cannot open database "LibraryDb"</i></td><td>The script was not run, or <code>Initial Catalog</code> has a different name</td><td>Run <code>database.sql</code>; compare the two names letter by letter</td></tr><tr><td><i>A network-related or instance-specific error</i></td><td>The server name in the connection string is wrong</td><td><code>Data Source=(localdb)\MSSQLLocalDB</code>, with <code>@</code> before the string</td></tr><tr><td><i>Specified cast is not valid</i></td><td>A cast does not match the column: <code>(int)</code> on a <code>DECIMAL</code>, <code>(DateTime)</code> on <code>NVARCHAR</code></td><td>Use the type table in requirement 2</td></tr><tr><td>Filtering cancels the search</td><td>An <code>OR</code> that is not wrapped in brackets</td><td>Group the <code>LIKE</code> conditions (requirement 8)</td></tr><tr><td>Choosing "All" shows nothing</td><td>The filter sends the text <i>"All"</i> to SQL</td><td>Send an empty string when <code>SelectedIndex == 0</code></td></tr><tr><td>Georgian text shows as <code>???</code></td><td><code>VARCHAR</code> instead of <code>NVARCHAR</code>, or no <code>N</code> before the text</td><td><code>NVARCHAR</code> columns and <code>N'...'</code> values</td></tr><tr><td><i>Object reference not set&#8230;</i> when the edit dialog opens</td><td>The second constructor has no <code>: this()</code>, so the controls were never created</td><td><code>public BookForm(Book book) : this()</code></td></tr><tr><td>The edit dialog opens empty</td><td>The second constructor does not copy the values into the controls</td><td><code>txtTitle.Text = book.Title;</code> and so on, for every control</td></tr><tr><td>Cancel still saves</td><td>The result of <code>ShowDialog()</code> is not checked</td><td><code>if (form.ShowDialog() == DialogResult.OK)</code></td></tr><tr><td>A new row appears only after restarting</td><td>The grid is not reloaded after saving</td><td>Call your load method after every add, update and delete</td></tr><tr><td>Cannot convert <code>decimal</code> to <code>int</code></td><td><code>NumericUpDown.Value</code> is always <code>decimal</code></td><td><code>(int)numYear.Value</code></td></tr><tr><td>The build fails after deleting a method</td><td>The <code>.Designer.cs</code> file still connects an event to it</td><td>Reset the event in the &#9889; Events list first (requirement 11)</td></tr><tr><td><i>NU1101: Unable to find package</i></td><td>NuGet has no package source</td><td><code>dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org</code></td></tr></tbody></table></div><aside class="note info"><b>If you are stuck</b><p>Ask in the week 8 or week 9 session. Questions about <b>your own</b> project are expected and cost you nothing. Asking a classmate to write a method for you costs you the whole midterm.</p></aside></section><footer class="foot">Lasha Iashvili &#183; Kutaisi International University (KIU) &#183; Object-Oriented Programming (C#) &#183; Midterm, weeks 8&#8211;9</footer></main></div>
+<script>(function(){
+  document.querySelectorAll('.code').forEach(function(box){
+    var btn = box.querySelector('.copy');
+    var pre = box.querySelector('pre');
+    if(!btn || !pre) return;
+    btn.addEventListener('click', function(){
+      var text = pre.innerText;
+      function done(label){ btn.textContent = label; setTimeout(function(){ btn.textContent = 'Copy'; }, 1500); }
+      function fallback(){
+        try{
+          var r = document.createRange(); r.selectNodeContents(pre);
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          done('Selected — press Ctrl+C');
+        }catch(e){ done('Select and copy'); }
+      }
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(function(){ done('Copied'); }, fallback);
+        } else { fallback(); }
+      }catch(e){ fallback(); }
+    });
+  });
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var targets = Object.keys(map).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if('IntersectionObserver' in window && targets.length){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(a){ a.classList.remove('on'); });
+          var a = map[en.target.id]; if(a){ a.classList.add('on'); }
+        }
+      });
+    }, {rootMargin:'-20% 0px -70% 0px'});
+    targets.forEach(function(t){ io.observe(t); });
+  }
+  try{
+    var h = (location.hash || '').slice(1);
+    if(h && /^[A-Za-z0-9._~-]+$/.test(h)){ var el = document.getElementById(h); if(el){ el.scrollIntoView(); } }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
