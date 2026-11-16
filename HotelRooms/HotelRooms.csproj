@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>HotelRooms</RootNamespace>
+    <AssemblyName>HotelRooms</AssemblyName>
+    <Authors>Giorgi Svanidze</Authors>
+    <Description>KIU C# midterm, topic 9: Hotel Rooms.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.8" />
+  </ItemGroup>
+</Project>
